@@ -278,7 +278,7 @@ def match_quality(df, holdout, covs_subset, match_indicator, ridge_reg = 0.1, tr
     
 # In[55]:
 
-def get_CATE(df, match_indicator, index):
+def get_CATE_bit(df, match_indicator, index):
     d = df[ match_indicator ]
     if index is None: # when index == None, nothing is matched
         return None
@@ -327,7 +327,7 @@ def num2vec(num, covs_max_list):
 
 # In[57]:
 
-def run(df, holdout, covs, covs_max_list, tradeoff_param = 0.1):
+def run_bit(df, holdout, covs, covs_max_list, tradeoff_param = 0.1):
     constant_list = ['outcome', 'treated']
     
     covs_dropped = []
@@ -345,7 +345,7 @@ def run(df, holdout, covs, covs_max_list, tradeoff_param = 0.1):
     timings[0] = timings[0] + time.time() - s
     
     s = time.time()
-    res = get_CATE(df, match_indicator, index) # get the CATEs without dropping anything
+    res = get_CATE_bit(df, match_indicator, index) # get the CATEs without dropping anything
     timings[3] = timings[3] + time.time() - s
     
     matching_res = [[( cur_covs, cur_covs_max_list, None, match_indicator, index), res]] # result on first level, None says nothing is dropped
@@ -390,7 +390,7 @@ def run(df, holdout, covs, covs_max_list, tradeoff_param = 0.1):
         
         del matching_result_tmp
         
-        new_matching_res = get_CATE(df, best_res[-2], best_res[-1])
+        new_matching_res = get_CATE_bit(df, best_res[-2], best_res[-1])
         
         cur_covs = best_res[0] 
         cur_covs_max_list = best_res[1]

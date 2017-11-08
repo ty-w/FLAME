@@ -226,7 +226,7 @@ def update_matched(covs_matched_on, db_name, level):
 # containing the combination of covariate values and the corresponding CATE 
 # and the corresponding effect (and the count and variance) as values
 
-def get_CATE(cov_l, db_name, level):
+def get_CATE_db(cov_l, db_name, level):
 
     cur.execute(''' select {0}, avg(outcome * 1.0), count(*)
                     from {1}
@@ -269,7 +269,7 @@ def get_CATE(cov_l, db_name, level):
 
 # In[7]:
 
-def run(db_name, holdout_df, num_covs, reg_param = 0.1):
+def run_db(db_name, holdout_df, num_covs, reg_param = 0.1):
 
     cur.execute('update {0} set matched = 0'.format(db_name)) # reset the matched indicator to 0
     conn.commit()
@@ -293,7 +293,7 @@ def run(db_name, holdout_df, num_covs, reg_param = 0.1):
     timings[4] = timings[4] + time.time() - s
         
     s = time.time()
-    d = get_CATE(cur_covs, db_name, level) # get CATE without dropping anything
+    d = get_CATE_db(cur_covs, db_name, level) # get CATE without dropping anything
     timings[3] = timings[3] + time.time() - s
     
     ds.append(d)
@@ -341,7 +341,7 @@ def run(db_name, holdout_df, num_covs, reg_param = 0.1):
         timings[4] = timings[4] + time.time() - s
         
         s = time.time()
-        d = get_CATE(cur_covs, db_name, level)
+        d = get_CATE_db(cur_covs, db_name, level)
         timings[3] = timings[3] + time.time() - s
         
         ds.append(d)
@@ -357,7 +357,6 @@ def run(db_name, holdout_df, num_covs, reg_param = 0.1):
 
 
 # In[2]:
-
 
 if __name__ == '__main__':
 
