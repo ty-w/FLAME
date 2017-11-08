@@ -30,41 +30,6 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 
 
-# In[85]:
-
-def data_generation_gradual_decrease(num_control, num_treated, num_cov):
-    
-    # a data generation function, not used here
-    
-    xc = np.random.binomial(1, 0.5, size=(num_control, num_cov))   # data for conum_treatedrol group
-    xt = np.random.binomial(1, 0.5, size=(num_treated, num_cov))   # data for treatmenum_treated group
-        
-    errors1 = np.random.normal(0, 0.05, size=num_control)    # some noise
-    errors2 = np.random.normal(0, 0.05, size=num_treated)    # some noise
-    
-    #dense_bs_sign = np.random.choice([-1,1], num_cov_dense)
-    dense_bs = [ (1./(i+1)) for i in range(num_cov) ]
-
-    yc = np.dot(xc, np.array(dense_bs)) #+ errors1     # y for control group 
-    
-    yt = np.dot(xt, np.array(dense_bs)) + 10 #+ errors2    # y for treated group 
-        
-    df1 = pd.DataFrame(np.hstack([xc]), 
-                       columns=range(num_cov))
-    df1['outcome'] = yc
-    df1['treated'] = 0
-
-    df2 = pd.DataFrame(np.hstack([xt]), 
-                       columns=range(num_cov ) ) 
-    df2['outcome'] = yt
-    df2['treated'] = 1
-
-    df = pd.concat([df1,df2])
-    df['matched'] = 0
-  
-    return df, dense_bs
-
-
 # In[49]:
 
 def data_generation_gradual_decrease_imbalance(num_control, num_treated, num_cov):
