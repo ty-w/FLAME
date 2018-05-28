@@ -389,6 +389,6 @@ if __name__ == '__main__':
 
     df.to_sql(db_name, engine)
         
-    res = run(db_name, holdout_df, 15)
+    res = run_db(db_name, holdout_df, 15)
     pickle.dump(res, open('FLAME-db-result', 'wb'))
     ## --above is an example
