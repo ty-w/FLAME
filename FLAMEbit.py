@@ -387,7 +387,7 @@ if __name__ == '__main__':
     df,_,_ = data_generation_dense_2(15000, 15000, 10, 5)
     holdout,_,_ = data_generation_dense_2(15000, 15000, 10, 5)
 
-    res = run(df, holdout, range(15), [2]*15, tradeoff_param = 0.1)
+    res = run_bit(df, holdout, range(15), [2]*15, tradeoff_param = 0.1)
 
     pickle.dump(res, open('FLAME-bit-result', 'wb'))
     ## above is an example
