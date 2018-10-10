@@ -119,7 +119,7 @@ def score_tentative_drop_c(cov_l, c, db_name, holdout_df, thres = 0, tradeoff = 
         )
         (SELECT {1}, treated, outcome
         FROM {3}
-        WHERE EXISTS 
+        WHERE "matched"=0 AND EXISTS 
         (SELECT 1
         FROM temp 
         WHERE {2}
