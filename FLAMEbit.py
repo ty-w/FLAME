@@ -5,11 +5,9 @@
 
 import numpy as np
 import pandas as pd
-#import pyodbc
 import pickle
 import time
 import itertools
-from joblib import Parallel, delayed
 
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.gaussian_process import GaussianProcessRegressor
@@ -368,6 +366,20 @@ def run_bit(df, holdout, covs, covs_max_list, tradeoff_param = 0.1):
     return (timings, cleanup_result(matching_res), level_scores )
 
 
+def get_estimate_vectors(df, result, covs):
+
+    effect = np.array([np.nan] * len(df))
+    group_size = np.array([np.nan] * len(df))
+
+    for i in range(len(result)):
+        
+        tmp = pd.merge(df, result[i], on = list(set(result[i].columns) & set(covs)), how = 'left' )
+        effect[np.where(np.isnan(effect))] = np.array(tmp['effect'])[np.where(np.isnan(effect))]
+        group_size[np.where(np.isnan(group_size))] = np.array(tmp['size'])[np.where(np.isnan(group_size))]
+
+    return (effect, group_size)
+
+
 if __name__ == '__main__':
 
     # store data in Pandas dataframe
@@ -389,5 +401,7 @@ if __name__ == '__main__':
 
     res = run_bit(df, holdout, range(15), [2]*15, tradeoff_param = 0.1)
 
-    pickle.dump(res, open('FLAME-bit-result', 'wb'))
+    estimate, group_size = get_estimate_vectors(df, res[1], range(15))
+
+    pickle.dump((res,estimate,group_size), open('FLAME-bit-result', 'wb'))
     ## above is an example
